@@ -87,7 +87,7 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} BookLoop. All rights reserved.
           </p>
 
-          {/* Social Media Icons */}
+          
           <div className="flex gap-4">
             {/* Facebook */}
             <a href="#" className="text-gray-500 hover:text-white transition" aria-label="Facebook">
