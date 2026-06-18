@@ -18,7 +18,7 @@ export default function HeroBanner() {
       bgGradient: "from-violet-600/30 via-fuchsia-500/10 to-transparent",
       badge: "New Release Loop",
       icon: <LuSparkles className="h-4 w-4 text-violet-400" />,
-      // টেক রিলেটেড এবং ডিজিটাল বুক ইমেজ
+    
       imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop"
     },
     {
@@ -103,7 +103,7 @@ export default function HeroBanner() {
               </div>
             </div>
 
-            {/* ডান পাশের ইমেজ সেকশন (কাস্টম ই-বুক ফ্রেম) */}
+           
             <div className="absolute right-16 bottom-0 top-0 hidden w-1/3 items-center justify-center md:flex z-10">
               
               {/* মেইন বুক ফ্রেম */}
@@ -120,7 +120,7 @@ export default function HeroBanner() {
                 </div>
               </div>
 
-              {/* ব্যাকগ্রাউন্ড শ্যাডো বুক ফ্রেম (থ্রিডি লুক দেওয়ার জন্য) */}
+           
               <div className="absolute right-24 top-28 h-72 w-52 rounded-2xl border border-white/10 shadow-xl overflow-hidden transform -rotate-6 -z-10 opacity-40">
                 <img 
                   src={slide.imageUrl} 
@@ -134,7 +134,7 @@ export default function HeroBanner() {
           </div>
         ))}
 
-        {/* বাম দিকের অ্যারো বাটন */}
+     
         <button
           onClick={prevSlide}
           className="absolute left-4 top-1/2 z-20 -translate-y-1/2 rounded-xl border border-white/10 bg-white/5 p-3 text-white transition hover:bg-white/10"
@@ -143,7 +143,7 @@ export default function HeroBanner() {
           <LuChevronLeft className="h-5 w-5" />
         </button>
 
-        {/* ডান দিকের অ্যারো বাটন */}
+  
         <button
           onClick={nextSlide}
           className="absolute right-4 top-1/2 z-20 -translate-y-1/2 rounded-xl border border-white/10 bg-white/5 p-3 text-white transition hover:bg-white/10"
@@ -152,7 +152,7 @@ export default function HeroBanner() {
           <LuChevronRight className="h-5 w-5" />
         </button>
 
-        {/* ডটস ইন্ডিকেটর */}
+     
         <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 gap-2">
           {slides.map((_, index) => (
             <button
