@@ -9,11 +9,22 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@heroui/react";
+import { useSession, signOut } from "../lib/auth-client";
+
+
 
 export default function Navbar() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const { data: session, isPending } = useSession();
+  const user = session?.user;
+
+  const handleSignOut = async () => {
+    await signOut();
+  }
+
+ 
   
   const navLinks = [
     { label: "Home", href: "/" },
@@ -60,9 +71,19 @@ export default function Navbar() {
 
           {/* LOGIN / LOGOUT BUTTONS */}
           <div className="flex items-center gap-4">
-            <Link href="/auth/signin" className="text-sm font-medium text-gray-300 transition hover:text-white">
+        { user ? <>
+              Hi, {user.name}!
+             
+             <Button 
+             onClick={handleSignOut}
+              variant="ghost">Sign Out</Button>
+
+           </>
+            :
+              <Link href="/auth/signin" className="text-sm font-medium text-gray-300 transition hover:text-white">
               Sign In 
             </Link>
+        }
             <Button variant="ghost" className="text-white border-white/10 hover:bg-white/5">
              Get Started
             </Button>
@@ -115,13 +136,15 @@ export default function Navbar() {
 
             {/* Auth Actions */}
             <div className="border-t border-white/10 pt-4 flex flex-col gap-3">
-              <Link
+        
+               <Link
                 href="/auth/signin"
                 className="rounded-xl px-4 py-3 text-base font-medium text-gray-300 transition hover:bg-white/5 hover:text-white"
                 onClick={() => setIsMenuOpen(false)}
               >
                Sign In 
               </Link>
+           
               <Button
                 variant="flat"
                 className="bg-white/5 text-white w-full"
@@ -137,3 +160,6 @@ export default function Navbar() {
     </nav>
   );
 }
+
+
+

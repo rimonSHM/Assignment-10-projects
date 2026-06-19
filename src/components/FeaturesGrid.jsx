@@ -167,7 +167,7 @@ export default function FeaturesGrid() {
           <span className="text-xs font-semibold tracking-widest text-violet-500 uppercase flex items-center justify-center gap-2">
             ▪ FEATURES BOOK ▪
           </span>
-          <h2 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-white leading-tight">
+          <h2 className="text-2xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-white leading-tight">
             Everything you need <br /> to succeed
           </h2>
         </div>
