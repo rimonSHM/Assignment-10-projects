@@ -2,7 +2,6 @@
 
 
 
-
 "use client";
 
 import { useState } from "react";
@@ -11,25 +10,31 @@ import { usePathname } from "next/navigation";
 import { Button } from "@heroui/react";
 import { useSession, signOut } from "../lib/auth-client";
 
-
-
 export default function Navbar() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // সেশন ও লোডিং স্টেট রিড করা হচ্ছে
   const { data: session, isPending } = useSession();
   const user = session?.user;
 
+  // সাইন আউট হ্যান্ডলার ফাংশন
   const handleSignOut = async () => {
-    await signOut();
-  }
+    await signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          window.location.href = "/auth/signin"; // লগআউট হলে সাইন-ইন পেজে রিডাইরেক্ট হবে
+        }
+      }
+    });
+  };
 
- 
-  
+  // ১. ডাইনামিক নেভিগেশন লিংক: লগইন স্ট্যাটাসের ওপর ভিত্তি করে তৈরি হবে
   const navLinks = [
     { label: "Home", href: "/" },
     { label: "Browse Ebooks", href: "/ebooks" },
-    { label: "Dashboard", href: "/dashboard" },
+    // যদি ইউজার লগইন থাকে (user সত্য হয়), তবেই ড্যাশবোর্ড লিংকটি মেনুতে যোগ হবে
+    ...(user ? [{ label: "Dashboard", href: "/dashboard" }] : []),
   ];
 
   return (
@@ -46,7 +51,6 @@ export default function Navbar() {
 
         {/* DESKTOP MENU */}
         <div className="hidden items-center gap-6 md:flex">
-          {/* NAVIGATION LINKS WITH ACTIVE HIGHLIGHTING */}
           <ul className="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-2">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
@@ -69,23 +73,30 @@ export default function Navbar() {
 
           <div className="h-6 w-px bg-white/20" />
 
-          {/* LOGIN / LOGOUT BUTTONS */}
+          {/* LOGIN / LOGOUT DYNAMIC BUTTONS */}
           <div className="flex items-center gap-4">
-        { user ? <>
-              Hi, {user.name}!
-             
-             <Button 
-             onClick={handleSignOut}
-              variant="ghost">Sign Out</Button>
-
-           </>
-            :
+            {isPending ? (
+              <span className="text-xs text-gray-400">Loading...</span>
+            ) : user ? (
+              <>
+                <span className="text-sm text-gray-300 font-medium">
+                  Hi, {user.name}!
+                </span>
+                <Button 
+                  onClick={handleSignOut}
+                  variant="ghost" 
+                  className="text-red-400 border-red-500/30 hover:bg-red-500/10"
+                >
+                  Sign Out
+                </Button>
+              </>
+            ) : (
               <Link href="/auth/signin" className="text-sm font-medium text-gray-300 transition hover:text-white">
-              Sign In 
-            </Link>
-        }
+                Sign In 
+              </Link>
+            )}
             <Button variant="ghost" className="text-white border-white/10 hover:bg-white/5">
-             Get Started
+              Get Started
             </Button>
           </div>
         </div>
@@ -112,7 +123,6 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="border-t border-white/10 bg-[#0B0B0F] md:hidden">
           <div className="space-y-3 px-4 py-6">
-            {/* Nav Links */}
             <ul className="space-y-2">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href;
@@ -134,24 +144,35 @@ export default function Navbar() {
               })}
             </ul>
 
-            {/* Auth Actions */}
             <div className="border-t border-white/10 pt-4 flex flex-col gap-3">
-        
-               <Link
-                href="/auth/signin"
-                className="rounded-xl px-4 py-3 text-base font-medium text-gray-300 transition hover:bg-white/5 hover:text-white"
-                onClick={() => setIsMenuOpen(false)}
-              >
-               Sign In 
-              </Link>
-           
+              {!isPending && user ? (
+                <>
+                  <div className="px-4 text-xs text-gray-400">Logged in as: {user.email}</div>
+                  <Button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      handleSignOut();
+                    }}
+                    className="bg-red-600/20 text-red-400 w-full rounded-xl py-3 font-medium"
+                  >
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <Link
+                  href="/auth/signin"
+                  className="rounded-xl px-4 py-3 text-base font-medium text-gray-300 transition hover:bg-white/5 hover:text-white"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Sign In 
+                </Link>
+              )}
               <Button
                 variant="flat"
                 className="bg-white/5 text-white w-full"
                 onClick={() => setIsMenuOpen(false)}
               >
-              Get Started 
-                
+                Get Started 
               </Button>
             </div>
           </div>
@@ -160,6 +181,3 @@ export default function Navbar() {
     </nav>
   );
 }
-
-
-
